@@ -54,16 +54,20 @@ namespace KB_LAB_3
         public void DrawPolygon(Graphics g, PointF[] points)
         {
             var vector = GetVector(points);
-            g.DrawPolygon(new Pen(Color.Black, 3), vector.Select(floats => new PointF(floats[0], floats[1])).ToArray());
+            g.DrawPolygon(new Pen(Color.Black, 3), vector);
         }
         
-        public void FillPolygon(Graphics g, PointF[] points)
+        public void FillPolygon(Graphics g, PointF[] points, Brush brush = null)
         {
+            if (brush == null)
+            {                
+                brush = Brushes.White;
+            }
             var vector = GetVector(points);
-            g.FillPolygon(Brushes.White, vector.Select(floats => new PointF(floats[0], floats[1])).ToArray());
+            g.FillPolygon(brush, vector);
         }
 
-        private float[][] GetVector(PointF[] points)
+        public PointF[] GetVector(PointF[] points)
         {
             var vectors = points.Select(f => new[] {f.X, f.Y, 1}).ToArray();
 
@@ -76,7 +80,7 @@ namespace KB_LAB_3
             m = MultipleMatrix3x3(m, _t);
 
             var vector = vectors.Select(floats => MultipleMatrix1x3(new[] {floats}, m)[0]).ToArray();
-            return vector;
+            return vector.Select(floats => new PointF(floats[0], floats[1])).ToArray();
         }
 
         public float[][] MultipleMatrix1x3(float[][] matrL, float[][] matrR)

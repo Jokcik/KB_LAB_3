@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DrawFox.cs" />
     <Compile Include="Matrix2D.cs" />
     <Compile Include="StartForm.cs">
       <SubType>Form</SubType>

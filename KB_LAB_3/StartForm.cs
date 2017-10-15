@@ -90,6 +90,10 @@ namespace KB_LAB_3
             var t23 = new PointF(t13.X, t13.Y - w * 2);
 
             var d = new Matrix2D();
+            d.Rotate(angle, center);
+            var fox = new DrawFox(g, d, center, radius);
+            fox.Draw();
+            
             for (var i = 0; i < 5; ++i)
             {
                 d.Rotate(angle + -45 - 22 * i, center);
@@ -114,12 +118,7 @@ namespace KB_LAB_3
                 d.DrawPolygon(g, new []{t11, t12, t13});
             }
 
-            DrawFox(g, d, center, radius);
-        }
 
-        private void DrawFox(Graphics graphics, Matrix2D matrix2D, Point center, int radius)
-        {
-            
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
