@@ -18,14 +18,14 @@ namespace KB_LAB_3
                 true);
             UpdateStyles();
 
-//            Timer timer = new Timer();
-//            timer.Interval = 2;
-//            timer.Tick += (sender, args) =>
-//            {
-//                angle += 0.05f;
-//                Invalidate();       
-//            };
-//            timer.Start();
+            Timer timer = new Timer();
+            timer.Interval = 2;
+            timer.Tick += (sender, args) =>
+            {
+                angle -= 0.1f;
+                Invalidate();       
+            };
+            timer.Start();
         }
 
         public StartForm()
@@ -92,7 +92,7 @@ namespace KB_LAB_3
             var d = new Matrix2D();
             d.Rotate(angle, center);
             var fox = new DrawFox(g, d, center, radius);
-            fox.Draw();
+            fox.Draw(angle);
             
             for (var i = 0; i < 5; ++i)
             {

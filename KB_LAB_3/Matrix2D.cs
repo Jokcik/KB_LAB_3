@@ -8,6 +8,7 @@ namespace KB_LAB_3
     {
         private float[][] _t;
         private float[][] _r;
+        private float[][] _d;
         
         public Matrix2D()
         {
@@ -31,10 +32,17 @@ namespace KB_LAB_3
             _t[2][1] = point.Y;
         }
 
+        public void resize(float sizeX, float sizeY)
+        {
+            _d[0][0] = sizeX;
+            _d[1][1] = sizeY;
+        }
+
         public void Reset()
         {
             _t = initMatr();
             _r = initMatr();
+            _d = initMatr();
         }
 
         private float[][] initMatr()
@@ -51,10 +59,14 @@ namespace KB_LAB_3
             DrawPolygon(g, points.Select(point => new PointF(point.X, point.Y)).ToArray());
         }
         
-        public void DrawPolygon(Graphics g, PointF[] points)
+        public void DrawPolygon(Graphics g, PointF[] points, Pen pen = null)
         {
+            if (pen == null)
+            {
+                pen = new Pen(Color.Black, 3);
+            }
             var vector = GetVector(points);
-            g.DrawPolygon(new Pen(Color.Black, 3), vector);
+            g.DrawPolygon(pen, vector);
         }
         
         public void FillPolygon(Graphics g, PointF[] points, Brush brush = null)
@@ -75,6 +87,7 @@ namespace KB_LAB_3
             _t[2][1] = -_t[2][1];
 
             var m = MultipleMatrix3x3(_t, _r);
+            m = MultipleMatrix3x3(m, _d);
             _t[2][0] = -_t[2][0];
             _t[2][1] = -_t[2][1];
             m = MultipleMatrix3x3(m, _t);
