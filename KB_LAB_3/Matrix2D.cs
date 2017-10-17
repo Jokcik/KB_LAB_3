@@ -9,6 +9,7 @@ namespace KB_LAB_3
         private float[][] _t;
         private float[][] _r;
         private float[][] _d;
+        private float[][] _o;
         
         public Matrix2D()
         {
@@ -32,17 +33,29 @@ namespace KB_LAB_3
             _t[2][1] = point.Y;
         }
 
-        public void resize(float sizeX, float sizeY)
+        public void Resize(float sizeX, float sizeY)
         {
             _d[0][0] = sizeX;
             _d[1][1] = sizeY;
         }
+
+        public void ReflectionX()
+        {
+            _o[0][0] = -1;
+        }
+        
+        public void ReflectionY()
+        {
+            _o[0][0] = -1;
+        }
+        
 
         public void Reset()
         {
             _t = initMatr();
             _r = initMatr();
             _d = initMatr();
+            _o = initMatr();
         }
 
         private float[][] initMatr()
@@ -88,6 +101,7 @@ namespace KB_LAB_3
 
             var m = MultipleMatrix3x3(_t, _r);
             m = MultipleMatrix3x3(m, _d);
+            m = MultipleMatrix3x3(m, _o);
             _t[2][0] = -_t[2][0];
             _t[2][1] = -_t[2][1];
             m = MultipleMatrix3x3(m, _t);

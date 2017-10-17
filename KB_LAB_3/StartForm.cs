@@ -18,8 +18,7 @@ namespace KB_LAB_3
                 true);
             UpdateStyles();
 
-            Timer timer = new Timer();
-            timer.Interval = 2;
+            Timer timer = new Timer {Interval = 2};
             timer.Tick += (sender, args) =>
             {
                 angle -= 0.1f;
@@ -43,15 +42,48 @@ namespace KB_LAB_3
             // Радиус большей окружности
             int radius;
             if (bounds.Width > bounds.Height)
-                radius = (int) bounds.Height / 3; // 
-            else radius = (int) bounds.Width / 3;
+                radius = (int) bounds.Height / 5; // 
+            else radius = (int) bounds.Width / 5;
 
             // Если размеры окна маленькие, ничего не выводить
             if (bounds.Width < 30 || bounds.Height < 30)
                 return;
 
+            LeftPicture(bounds, radius, g);
+            g.DrawLine(Pens.Gray, new PointF(bounds.Width / 2, bounds.Top),  new PointF(bounds.Width / 2, bounds.Bottom));
+            RightPicture(bounds, radius, g);
+
+
+            base.OnPaint(e);
+        }
+
+        private void RightPicture(RectangleF bounds, int radius, Graphics g)
+        {
             // Координаты центра окружности
-            var center = new Point((int) bounds.Width / 2, (int) bounds.Height / 2);
+            var center = new Point((int) (3 * bounds.Width) / 4, (int) bounds.Height / 2);
+
+            // Рисуем круг
+            var rect = new Rectangle(center.X - radius, center.Y - radius, radius * 2, radius * 2);
+            g.DrawEllipse(Pens.Black, rect);
+            g.DrawPie(Pens.Black, rect, -angle + -120, 60);
+            g.DrawPie(Pens.Black, rect, -angle + 120, -60);
+
+            var smallRadius = radius / 3;
+            var rectSmall = new RectangleF(center.X - smallRadius, center.Y - smallRadius, smallRadius * 2,
+                smallRadius * 2);
+            g.FillEllipse(Brushes.White, rectSmall);
+            g.DrawEllipse(new Pen(Brushes.Black, 3), rectSmall);
+
+            var d = new Matrix2D();
+            d.Rotate(angle, center);
+            d.ReflectionX();
+            createRect(g, center, radius, d);
+        }
+
+        private void LeftPicture(RectangleF bounds, int radius, Graphics g)
+        {
+            // Координаты центра окружности
+            var center = new Point((int) bounds.Width / 4, (int) bounds.Height / 2);
 
             // Рисуем круг
             var rect = new Rectangle(center.X - radius, center.Y - radius, radius * 2, radius * 2);
@@ -65,12 +97,12 @@ namespace KB_LAB_3
             g.FillEllipse(Brushes.White, rectSmall);
             g.DrawEllipse(new Pen(Brushes.Black, 3), rectSmall);
 
-            createRect(g, center, radius);
-
-            base.OnPaint(e);
+            var d = new Matrix2D();
+            d.Rotate(angle, center);
+            createRect(g, center, radius, d);
         }
 
-        private void createRect(Graphics g, Point center, int radius)
+        private void createRect(Graphics g, Point center, int radius, Matrix2D d)
         {
             var centerRect = new Point(center.X, center.Y - radius);
             var wL = (float)Math.PI * radius / 180 * 120; 
@@ -89,8 +121,6 @@ namespace KB_LAB_3
             var t22 = new PointF(t12.X, centerRect.Y - w * 4);
             var t23 = new PointF(t13.X, t13.Y - w * 2);
 
-            var d = new Matrix2D();
-            d.Rotate(angle, center);
             var fox = new DrawFox(g, d, center, radius);
             fox.Draw(angle);
             
